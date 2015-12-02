@@ -34,7 +34,7 @@ assStmt	:	var '=' expr;
 var	:	IDF | IDF DOT IDF | arrayVar;
 arrayVar:	IDF LBRACK expr RBRACK DOT IDF | IDF LBRACK expr RBRACK;
 
-expr	:	orExpr | var TOUCH var;
+expr	:	orExpr ;
 orExpr	:	andExpr (OR andExpr)*;
 andExpr	:	relExpr (AND relExpr)*;
 relExpr	:	addExpr (relOp addExpr)*;
@@ -43,13 +43,13 @@ addExpr	:	multExpr (addOp multExpr)*;
 addOp	:	PLUS | MINUS;
 multExpr:	uExpr (multOp uExpr)*;
 multOp	:	TIMES | DIV;
-uExpr	:	uOp (NUMBER | var | '(' expr ')');
+uExpr	:	uOp (NUMBER | var ('touches'^ var)? | '(' expr ')');
 uOp	:	MINUS | NOT |;
 
 
 // scanner rules
 // operators ordered by precedence
-TOUCH	:	'touches';
+
 
 DOT	:	'.';
 
