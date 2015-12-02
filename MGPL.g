@@ -5,6 +5,7 @@ grammar MGPL;
 options
 {
   backtrack = true;
+  k = 2;
 }
 
 // parser rules
