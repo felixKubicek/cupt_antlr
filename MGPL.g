@@ -4,21 +4,34 @@ grammar MGPL;
 // output = AST;
 options
 {
-  backtrack = true;
-  k = 2;
+  backtrack = false;
+  k = 1;
+  
 }
 
 // parser rules
-prog	:	'game' IDF '(' attrAssList? ')' decl* stmtBlock block*EOF; 
+prog	:	'game' IDF attrAssListBegin decl* stmtBlock block*EOF; 
 
 decl	:	varDecl ';' | objDecl ';';
-varDecl	:	'int' IDF init? | 'int' IDF '[' NUMBER ']';
+varDecl	:	'int' IDF varDecl_alt;
+varDecl_alt
+	:	init? | '[' NUMBER ']';
 init	:	'=' expr;
-objDecl	:	objType IDF '(' attrAssList? ')' |  objType IDF '[' NUMBER ']' ;
+objDecl	:	objType IDF objDeclCont;
+objDeclCont
+	:	 attrAssListBegin |  '[' NUMBER ']' ;
 objType	:	'rectangle' | 'triangle' | 'circle';
-attrAssList 
-	:	attrAss (',' attrAss)*;
-attrAss	:	assStmt;
+
+attrAssListBegin
+	:	'(' attrAssList;
+
+attrAssList
+	:	 ')' |  assStmt assStmtCont;
+assStmtCont
+	:	 ',' assStmt assStmtCont | ')';
+
+
+
 block	:	animBlock | eventBlock;
 animBlock
 	:	'animation' IDF '(' objType IDF ')' stmtBlock;
@@ -32,8 +45,10 @@ stmt	:	ifStmt | forStmt | assStmt ';';
 ifStmt	:	'if' '(' expr ')' stmtBlock ('else' stmtBlock)?;
 forStmt	:	'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock;
 assStmt	:	var '=' expr;
-var	:	IDF | IDF DOT IDF | arrayVar;
-arrayVar:	IDF LBRACK expr RBRACK DOT IDF | IDF LBRACK expr RBRACK;
+var	:	IDF var_alt;
+var_alt :	DOT IDF | LBRACK expr RBRACK var_array_alt|;
+var_array_alt
+	:	DOT IDF | ;
 
 expr	:	orExpr ;
 orExpr	:	andExpr (OR andExpr)*;
