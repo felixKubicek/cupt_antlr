@@ -1,12 +1,13 @@
+// Robert Schäfer
+// Felix Kubicek
+
 grammar MGPL;
 
-// k = 1;
-// output = AST;
 options
 {
   backtrack = false;
   k = 1;
-  
+// output = AST;
 }
 
 // parser rules
