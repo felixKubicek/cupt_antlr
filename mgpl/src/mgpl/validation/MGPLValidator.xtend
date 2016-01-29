@@ -172,6 +172,15 @@ class MGPLValidator extends AbstractMGPLValidator {
 			error("Attibute not allowed", MGPLPackage.Literals.ATTR_ASS__NAME)
 			
 		}
+		if (it.name == "animation_block"){
+			val feature= eClass.getEStructuralFeature(MGPLPackage.Literals.ATTR_ASS__VALUE.name)
+			val expr = eGet(feature)
+			if (expr instanceof Var){
+				if (!expr.animation){
+					error("This is not an animation block", MGPLPackage.Literals.ATTR_ASS__VALUE)
+				}
+			}
+		}
 		
 		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
 		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
