@@ -163,13 +163,22 @@ class MGPLValidator extends AbstractMGPLValidator {
 	def checkAttributeAssignment(AttrAss it) {
 		
 		
-		/*TODO*/
 		
 		
+		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
 		if(!eContainer.allowedAttributes.contains(it.name)){
 			error("Attibute not allowed", MGPLPackage.Literals.ATTR_ASS__NAME)
 			
 		}
+		
+		/*TODO*/
+		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
+		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
+		
+		
+		
+		
+		// prüfen, dass der Animation-Handler einen passenden Typ hat (Aufg. 2. Bindungen)
 		if (it.name == "animation_block"){
 			val feature= eClass.getEStructuralFeature(MGPLPackage.Literals.ATTR_ASS__VALUE.name)
 			val expr = eGet(feature)
@@ -179,6 +188,16 @@ class MGPLValidator extends AbstractMGPLValidator {
 				}
 			}
 		}
+		
+		// prüfen, dass Game-Attribute nur mit konstanten Zahlen belegt werden (Aufg. 2. Attribute)
+		if (eContainer instanceof Prog){
+			
+			if( ! (it.value instanceof NumberLiteral)){
+				error("Value must be a constant number", MGPLPackage.Literals.ATTR_ASS__VALUE)
+			}
+			
+		}
+		// prüfen, dass das Game-Attribut speed mit einem Wert zwischen 0 und 100 belegt wird (Aufg. 2. Attribute)
 		if (it.name == "speed"  ){
 		    val feature= eClass.getEStructuralFeature(MGPLPackage.Literals.ATTR_ASS__VALUE.name)
 			val expr = eGet(feature)
@@ -195,12 +214,8 @@ class MGPLValidator extends AbstractMGPLValidator {
 			
 		}
 		
-		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
-		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
-		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
-		// prüfen, dass der Animation-Handler einen passenden Typ hat (Aufg. 2. Bindungen)
-		// prüfen, dass Game-Attribute nur mit konstanten Zahlen belegt werden (Aufg. 2. Attribute)
-		// prüfen, dass das Game-Attribut speed mit einem Wert zwischen 0 und 100 belegt wird (Aufg. 2. Attribute)
+		
+		
 		
 	}
 
