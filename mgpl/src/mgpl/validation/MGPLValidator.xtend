@@ -221,10 +221,12 @@ class MGPLValidator extends AbstractMGPLValidator {
 
 	@Check
 	def checkMemberName(MemberSelect it) {
-		/*TODO*/
-		
 		//prüfen, ob ein verwendetes Attribut für das jeweilige Objekt erlaubt ist (Aufg. 2. Bindungen)
-		
+		if(variable instanceof Var){
+			if(!variable.id.allowedAttributes.contains(memberName)){
+				error("attribute is not allowed for this object", MGPLPackage.Literals.MEMBER_SELECT__MEMBER_NAME)
+			}
+		}
 	}
 
 	@Check
