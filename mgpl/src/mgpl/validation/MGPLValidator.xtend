@@ -153,18 +153,16 @@ class MGPLValidator extends AbstractMGPLValidator {
 			error("Receiving identifier must be an array", MGPLPackage.Literals.VAR__VARIABLE)
 		}
 		
-	
+		
+	    
 		// prüfen, dass sämtliche Vorkommen von Variablen- oder Objektnamen deklaiert sind und wie es verwendet wird  (Aufg. 2. Bindungen)
 		
 	}
 
 	@Check
 	def checkAttributeAssignment(AttrAss it) {
-		if ((it.name == 'animation_block')){
-			 	
-			
 		
-		}
+		
 		/*TODO*/
 		
 		
@@ -180,6 +178,21 @@ class MGPLValidator extends AbstractMGPLValidator {
 					error("This is not an animation block", MGPLPackage.Literals.ATTR_ASS__VALUE)
 				}
 			}
+		}
+		if (it.name == "speed"  ){
+		    val feature= eClass.getEStructuralFeature(MGPLPackage.Literals.ATTR_ASS__VALUE.name)
+			val expr = eGet(feature)
+			if (expr instanceof NumberLiteral){
+				val v = expr.value as Number
+				if ((v.intValue() < 0) || (100 < v.intValue())){
+					error("Value must be in range [0,100]", MGPLPackage.Literals.ATTR_ASS__VALUE)
+				}
+			} else{
+				error("Value must a Literal", MGPLPackage.Literals.ATTR_ASS__VALUE)
+				
+			}
+			
+			
 		}
 		
 		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
@@ -202,6 +215,7 @@ class MGPLValidator extends AbstractMGPLValidator {
 	@Check
 	def checkAnimation_blockAssignment(AssStmt it) {
 		/*TODO*/
+
 		
 		// prüfen, dass das Attribut animation_block in einer Zuweisungsanweisung mit dem Namen eines Animation-Handlers 
 		// belegt wird und dass dieser einen passenden Typ hat  (Aufg. 2. Bindungen)
