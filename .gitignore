@@ -1,1 +1,3 @@
-output/*
+*
+!*/
+!mgpl/src/mgpl/validation/MGPLValidator.xtend
