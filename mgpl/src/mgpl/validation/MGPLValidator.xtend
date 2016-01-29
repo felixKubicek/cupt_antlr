@@ -167,6 +167,12 @@ class MGPLValidator extends AbstractMGPLValidator {
 		}
 		/*TODO*/
 		
+		
+		if(!eContainer.allowedAttributes.contains(it.name)){
+			error("Attibute not allowed", MGPLPackage.Literals.ATTR_ASS__NAME)
+			
+		}
+		
 		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
 		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
 		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
