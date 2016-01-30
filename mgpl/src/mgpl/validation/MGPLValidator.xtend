@@ -148,7 +148,7 @@ class MGPLValidator extends AbstractMGPLValidator {
 	@Check
 	def checkVar(Var it) {
    
-		if (usedAsObject && (!hasMembers)) {
+		if (usedAsObject && (!isArray) && (!hasMembers)) {
 			error("Receiving identifier must be an object", MGPLPackage.Literals.VAR__VARIABLE)
 		}
 		if (usedAsArray && (!isArray)) {
@@ -191,6 +191,7 @@ class MGPLValidator extends AbstractMGPLValidator {
 		
 		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
 		// *TODO*
+		// ??? wo ist der Unterschied zum nächsten Constraint ???
 		
 		
 		
@@ -239,7 +240,7 @@ class MGPLValidator extends AbstractMGPLValidator {
 	def checkMemberName(MemberSelect it) {
 		//prüfen, ob ein verwendetes Attribut für das jeweilige Objekt erlaubt ist (Aufg. 2. Bindungen)
 		if(variable instanceof Var){
-			if(!variable.id.allowedAttributes.contains(memberName)){
+			if(!variable.id.allowedAttributes.contains(longAttributeName(memberName))){
 				error("attribute is not allowed for this object", MGPLPackage.Literals.MEMBER_SELECT__MEMBER_NAME)
 			}
 		}
@@ -247,13 +248,27 @@ class MGPLValidator extends AbstractMGPLValidator {
 
 	@Check
 	def checkAnimation_blockAssignment(AssStmt it) {
-		/*TODO*/
-
-		
+	
 		// prüfen, dass das Attribut animation_block in einer Zuweisungsanweisung mit dem Namen eines Animation-Handlers 
 		// belegt wird und dass dieser einen passenden Typ hat  (Aufg. 2. Bindungen)
 		// Bsp.: c.animation_block = a[3] ist unzulässig; richtig: c.animation_block = lead_alien_animate
+		if (variable instanceof MemberSelect){
+			val member_select = variable as MemberSelect
+			if (member_select.memberName == "animation_block"){
+				val feature= eClass.getEStructuralFeature(MGPLPackage.Literals.ASS_STMT__EXPRESSION.name)
+			    val expr = eGet(feature)
+				if (expr instanceof Var){
+					if (!expr.animation)
+					error("Assignments to 'animation_block' must be a animation block", MGPLPackage.Literals.ASS_STMT__EXPRESSION)
+				} else {
+					error("Assignments to 'animation_block' must come from a variable", MGPLPackage.Literals.ASS_STMT__EXPRESSION)
+				}
+				
+			}
+		}
 		
+		
+
 	}
 	
 }
