@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
 
 import static extension mgpl.Common.*
+import java.util.HashSet
+import java.util.Set
 
 /**
  * This class contains custom validation rules. 
@@ -166,15 +168,29 @@ class MGPLValidator extends AbstractMGPLValidator {
 		
 		
 		// prüfen, dass dieses Attribut für dieses Objekt erlaubt ist (Aufg. 2. Attribute)
-		if(!eContainer.allowedAttributes.contains(it.name)){
+		if(!eContainer.allowedAttributes.contains(longAttributeName(it.name))){
 			error("Attibute not allowed", MGPLPackage.Literals.ATTR_ASS__NAME)
 			
 		}
 		
-		/*TODO*/
-		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
-		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
 		
+		// prüfen, dass dieses Attribut, das einen langen und einen kurzen Namen haben kann, nur einmal in diesem Objekt belegt wird (Aufg. 2. Attribute)
+		val Set<String> uniques = new HashSet<String>
+		for (EObject e : eContainer.eContents) {
+			if (e instanceof AttrAss) {
+				if (!uniques.add(longAttributeName(e.name)) && (e.name == it.name)) {
+					error("Duplicate Attibute", MGPLPackage.Literals.ATTR_ASS__NAME)
+				}
+
+			}
+
+		}
+		
+		
+		
+		
+		// prüfen, dass das Grafikobjekt-Attribut animation_block mit dem Namen eines Animation-Handlers belegt wird (Aufg. 2. Bindungen)
+		// *TODO*
 		
 		
 		
